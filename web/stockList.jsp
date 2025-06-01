@@ -50,11 +50,6 @@
                 align-items: center;
             }
 
-            .header h1 {
-                margin: 0;
-                /* font-size: 22px; */
-            }
-
             .header a {
                 background-color: #4CAF50;
                 color: white;
@@ -113,6 +108,22 @@
             button[type="submit"]:last-child {
                 background-color: #f44336; /* Delete button */
             }
+
+            .msg {
+                margin-top: 15px;
+                padding: 10px;
+                background-color: #e0ffe0;
+                border: 1px solid #5cb85c;
+                color: #3c763d;
+                border-radius: 4px;
+                width: fit-content;
+            }
+            .sidebar a.active {
+                background-color: #283593;
+                padding: 5px;
+                border-radius: 4px;
+            }
+
         </style>
     </head>
     <body>
@@ -127,15 +138,16 @@
 
             <div class="sidebar">
                 <h2>Menu</h2>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=SearchUser">User List</a>
-                <a href="MainController?action=SearchStock">Transaction List</a>
+                <a class="active" href="MainController?action=SearchStock">Stock List</a>
                 <a href="MainController?action=SearchAlert">Alert List</a>
             </div>
 
             <div class="main-content">
                 <div class="header">
                     <h1>Welcome, <c:out value="${sessionScope.LOGIN_USER.fullName}"/></h1>
-                    <p><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></p>
+                    <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
                 
                 <!-- Price‐range search -->

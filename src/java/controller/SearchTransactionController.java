@@ -7,12 +7,15 @@ package controller;
 
 import dao.TransactionDAO;
 import dto.Transaction;
+import dto.User;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -21,24 +24,36 @@ import java.util.List;
  */
 @WebServlet(name="SearchTransactionController", urlPatterns={"/SearchTransactionController"})
 public class SearchTransactionController extends HttpServlet {
+    
+    private TransactionDAO dao = new TransactionDAO();
    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String search = request.getParameter("search");
+        HttpSession session = request.getSession();
+        User loginUser = (User) session.getAttribute("LOGIN_USER");
         
-        if(search == null) {
-            search = "";
+        List<Transaction> list = null;
+        if ("AD".equals(loginUser.getRoleID())) {
+            // Admin thấy tất cả
+            String search = request.getParameter("search");
+            if(search == null) {
+                search = "";
+            }
+            try {
+                list = dao.search(search);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Nhân viên chỉ thấy của mình
+            try {
+                list = dao.getTransactionsByUserID(loginUser.getUserID());
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         }
-        
-        TransactionDAO dao = new TransactionDAO();
-        List<Transaction> list;
-        try {
-            list = dao.search(search);
-            request.setAttribute("list", list);
-            request.getRequestDispatcher("transactionList.jsp").forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("transactionList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

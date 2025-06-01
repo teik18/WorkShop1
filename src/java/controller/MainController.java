@@ -33,6 +33,12 @@ public class MainController extends HttpServlet {
     private static final String DELETE_USER_CONTROLLER = "DeleteUserController";
     private static final String CREATE_USER = "CreateUser";
     private static final String CREATE_USER_CONTROLLER = "CreateUserController";
+    private static final String SEARCH_TRANSACTION = "SearchTransaction";
+    private static final String SEARCH_TRANSACTION_CONTROLLER = "SearchTransactionController";
+    private static final String CREATE_TRANSACTION = "CreateTransaction";
+    private static final String CREATE_TRANSACTION_CONTROLLER = "CreateTransactionController";
+    private static final String UPDATE_TRANSACTION = "UpdateTransaction";
+    private static final String UPDATE_TRANSACTION_CONTROLLER = "UpdateTransactionController";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -44,8 +50,8 @@ public class MainController extends HttpServlet {
                 url = LOGIN_CONTROLLER;
             } else if (SEARCH_STOCK.equals(action)) {
                 url = SEARCH_STOCK_CONTROLLER;
-            } else if ("searchTransaction".equals(action)) {
-                url = "SearchTransactionController";
+            } else if (SEARCH_TRANSACTION.equals(action)) {
+                url = SEARCH_TRANSACTION_CONTROLLER;
             } else if (SEARCH_USER.equals(action)) {
                 url = SEARCH_USER_CONTROLLER;
             } else if (UPDATE_USER.equals(action)) {
@@ -54,12 +60,11 @@ public class MainController extends HttpServlet {
                 url = DELETE_USER_CONTROLLER;
             } else if (CREATE_USER.equals(action)) {
                 url = CREATE_USER_CONTROLLER;
-            }
-            else if ("ShowCreateForm".equals(action)) {
-                request.setAttribute("showCreateForm", true);
-                url = SEARCH_USER_CONTROLLER;
-            }
-            else {
+            } else if (CREATE_TRANSACTION.equals(action)) {
+                url = CREATE_TRANSACTION_CONTROLLER;
+            } else if (UPDATE_TRANSACTION.equals(action)) {
+                url = UPDATE_TRANSACTION_CONTROLLER;
+            } else {
                 url = "login.jsp";
             }
         } catch (Exception e) {

@@ -55,11 +55,6 @@
                 align-items: center;
             }
 
-            .header h1 {
-                margin: 0;
-                /* font-size: 22px; */
-            }
-
             .header a {
                 background-color: #4CAF50;
                 color: white;
@@ -150,7 +145,11 @@
                 border-radius: 4px;
                 width: fit-content;
             }
-
+            .sidebar a.active {
+                background-color: #283593;
+                padding: 5px;
+                border-radius: 4px;
+            }
         </style>
     </head>
     <body>
@@ -163,15 +162,16 @@
         <div class="containner">
             <div class="sidebar">
                 <h2>Menu</h2>
-                <a href="MainController?action=SearchStock">Stock List</a>
                 <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a class="active" href="MainController?action=SearchUser">User List</a>
+                <a href="MainController?action=SearchStock">Stock List</a>
                 <a href="MainController?action=SearchAlert">Alert List</a>
             </div>
 
             <div class="main-content">
                 <div class="header">
                     <h1>Welcome, <c:out value="${sessionScope.LOGIN_USER.fullName}"/></h1>
-                    <p><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></p>
+                    <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
 
                 <button id="showCreateForm" type="button" onclick="toggleCreateForm()">Create</button>

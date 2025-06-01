@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import utils.DBUtils;
 
 /**
@@ -107,5 +108,28 @@ public class TransactionDAO {
             }
         }
         return isUpdated;
+    }
+    
+    public List<Transaction> getTransactionsByUserID(String userID) throws SQLException, ClassNotFoundException {
+        List<Transaction> list = new ArrayList<>();
+        String sql = "SELECT * FROM tblTransactions WHERE userID = ?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, userID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while(rs.next()) {
+                    int id = rs.getInt("id");
+                    String ticker = rs.getString("ticker");
+                    String type = rs.getString("type");
+                    int quantity = rs.getInt("quantity");
+                    float price = rs.getFloat("price");
+                    String status = rs.getString("status");
+                    list.add(new Transaction(id, userID, ticker, type, quantity, price, status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }
