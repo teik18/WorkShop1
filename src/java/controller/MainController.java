@@ -39,7 +39,15 @@ public class MainController extends HttpServlet {
     private static final String CREATE_TRANSACTION_CONTROLLER = "CreateTransactionController";
     private static final String UPDATE_TRANSACTION = "UpdateTransaction";
     private static final String UPDATE_TRANSACTION_CONTROLLER = "UpdateTransactionController";
-
+    private static final String SEARCH_ALERT = "ViewAlerts";
+    private static final String SEARCH_ALERT_CONTROLLER = "SearchAlertController";
+    private static final String CREATE_ALERT = "CreateAlert";
+    private static final String CREATE_ALERT_CONTROLLER = "CreateAlertController";
+    private static final String UPDATE_ALERT = "UpdateAlert";
+    private static final String UPDATE_ALERT_CONTROLLER = "UpdateAlertController";
+    private static final String DELETE_ALERT = "DeleteAlert";
+    private static final String DELETE_ALERT_CONTROLLER = "DeleteAlertController";
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -64,6 +72,14 @@ public class MainController extends HttpServlet {
                 url = CREATE_TRANSACTION_CONTROLLER;
             } else if (UPDATE_TRANSACTION.equals(action)) {
                 url = UPDATE_TRANSACTION_CONTROLLER;
+            } else if (SEARCH_ALERT.equals(action)) {
+                url = SEARCH_ALERT_CONTROLLER;
+            } else if (CREATE_ALERT.equals(action)) {
+                url = CREATE_ALERT_CONTROLLER;
+            } else if (UPDATE_ALERT.equals(action)) {
+                url = UPDATE_ALERT_CONTROLLER;
+            } else if (DELETE_ALERT.equals(action)) {
+                url = DELETE_ALERT_CONTROLLER;
             } else {
                 url = "login.jsp";
             }

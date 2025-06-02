@@ -165,7 +165,7 @@
                 <a class="active" href="MainController?action=SearchUser">User List</a>
                 <a href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=SearchStock">Stock List</a>
-                <a href="MainController?action=SearchAlert">Alert List</a>
+                <a href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">
