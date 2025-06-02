@@ -141,8 +141,8 @@
         <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
-                <a class="active" href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=SearchUser">User List</a>
+                <a class="active" href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=SearchStock">Stock List</a>
                 <a href="MainController?action=SearchAlert">Alert List</a>
             </div>
