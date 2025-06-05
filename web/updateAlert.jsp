@@ -13,111 +13,56 @@
     <head>
         <title>UPDATE ALERT</title>
         <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f9f8ff;
+            * {
+                box-sizing: border-box;
             }
 
-            .container {
+            body {
+                background-color: #f7f9ff;
+                font-family: Arial, sans-serif;
                 display: flex;
+                justify-content: center;
+                align-items: center;
                 height: 100vh;
             }
-
-            .sidebar {
-                width: 220px;
-                background-color: #3f51b5;
-                color: white;
-                padding: 20px;
+            .form-container {
+                background-color: white;
+                padding: 30px 40px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                width: 400px;
             }
-
-            .sidebar h2 {
-                font-size: 24px;
+            .form-container h2 {
+                text-align: center;
+                color: #333;
                 margin-bottom: 20px;
             }
-
-            .sidebar a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                margin-bottom: 10px;
+            label {
                 font-weight: bold;
             }
-
-            .sidebar a:hover {
-                background-color: #303f9f;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .header h1 {
-                margin: 0;
-                /* font-size: 22px; */
-            }
-
-            .header a {
-                background-color: #4CAF50;
-                color: white;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-
-            .header a:hover {
-                background-color: #45a049;
-            }
-
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            table {
+            input[type="text"], input[type="number"], select {
                 width: 100%;
-                border-collapse: collapse;
+                padding: 10px;
+                margin: 8px 0 16px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
             }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #3f51b5;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            tr:hover {
-                background-color: #ddd;
-            }
-
-            .actions button {
-                margin-right: 5px;
-            }
-
             button {
-                padding: 6px 12px;
-                margin-right: 5px;
-                background-color: #2196F3;
+                width: 100%;
+                padding: 12px;
+                background-color: #3b5bdb;
                 color: white;
+                font-weight: bold;
                 border: none;
+                border-radius: 6px;
                 cursor: pointer;
-                border-radius: 4px;
+                margin-bottom: 10px;
             }
-
-            button[type="submit"]:last-child {
-                background-color: #f44336; /* Delete button */
+            button:hover {
+                background-color: #2f4cc0;
+            }
+            a {
+                text-decoration: none;
             }
         </style>
     </head>
@@ -136,46 +81,33 @@
                     return;
                 }
         %>
-        <div class="container">
-            <div class="sidebar">
-                <h2>Menu</h2>
-                <a href="MainController?action=SearchUser">Stocks List</a>
-                <a href="MainController?action=SearchStock">Transactions List</a>
-                <a href="MainController?action=ViewAlert">Alerts List</a>
-                <% if ("AD".equals(loginUser.getRoleID())) { %>
-                <a href="MainController?action=ViewUsers">Users List</a><br>
-                <% } %>
-            </div>
+        <div class="form-container">
+            <h2>Update Alert</h2>
+            <form action="MainController" method="POST">
+                <label>ID </label>
+                <input type="text" name="alertID" value="<%= alert.getAlertID() %>" readonly><br>
 
-            <div class="main-content">
-                <div class="header">
-                    <h1>Welcome, <c:out value="${sessionScope.LOGIN_USER.fullName}"/></h1>
-                    <p><a href="${pageContext.request.contextPath}/LogoutController">Logout</a></p>
-                </div>
-                <h2>Update Alert</h2>
-                <% String msg = (String) request.getAttribute("MSG");%>
-                <% if (msg != null && msg.contains("successfully")) { %>
-                <p style="color:green"><%= msg %></p>
-                <% } else if (msg != null) { %>
-                <p style="color:red"><%= msg %></p>
-                <% } %>
-                <form action="MainController" method="POST">
-                    ID: <input type="text" name="alertID" value="<%= alert.getAlertID() %>" readonly><br>
-                    Ticker: <input type="text" name="ticker" value="<%= alert.getTicker() %>" readonly><br>
-                    Threshold: <input type="number" name="threshold" value="<%= alert.getThreshold() %>" step="0.01" required><br>
-                    Direction: <select name="direction">
-                        <option value="increase" <%= "increase".equals(alert.getDirection()) ? "selected" : "" %>>Increase</option>
-                        <option value="decrease" <%= "decrease".equals(alert.getDirection()) ? "selected" : "" %>>Decrease</option>
-                    </select><br>
-                    Status: <select name="status">
-                        <option value="inactive" <%= "inactive".equals(alert.getStatus()) ? "selected" : "" %>>Inactive</option>
-                        <option value="active" <%= "active".equals(alert.getStatus()) ? "selected" : "" %>>Active</option>
-                        <option value="pending" <%= "pending".equals(alert.getStatus()) ? "selected" : "" %>>Pending</option>
-                    </select><br>
-                    <input type="submit" name="action" value="UpdateAlert">
-                    <a href="MainController?action=ViewAlerts">Back to Alert List</a>
-                </form>
-            </div>
+                <label>Ticker </label>
+                <input type="text" name="ticker" value="<%= alert.getTicker() %>" readonly><br>
+
+                <label>Threshold </label>
+                <input type="number" name="threshold" value="<%= alert.getThreshold() %>" step="0.01" required><br>
+
+                <label>Direction </label>
+                <select name="direction">
+                    <option value="increase" <%= "increase".equals(alert.getDirection()) ? "selected" : "" %>>Increase</option>
+                    <option value="decrease" <%= "decrease".equals(alert.getDirection()) ? "selected" : "" %>>Decrease</option>
+                </select><br>
+
+                <label>Status </label>
+                <select name="status">
+                    <option value="inactive" <%= "inactive".equals(alert.getStatus()) ? "selected" : "" %>>Inactive</option>
+                    <option value="active" <%= "active".equals(alert.getStatus()) ? "selected" : "" %>>Active</option>
+                    <option value="pending" <%= "pending".equals(alert.getStatus()) ? "selected" : "" %>>Pending</option>
+                </select><br>
+                <button type="submit" name="action" value="UpdateAlert">Edit</button>
+                <a href="MainController?action=ViewAlerts">Back to Alert List</a>
+            </form>
         </div>
     </body>
 </html>

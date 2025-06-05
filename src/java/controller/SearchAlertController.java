@@ -37,16 +37,20 @@ public class SearchAlertController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("LOGIN_USER");
+        if (loginUser == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
         try {
             String keyword = request.getParameter("search") != null ? request.getParameter("search") : "";
-            String direction = request.getParameter("direction") != null ? request.getParameter("direction") : "";
-            String status = request.getParameter("status") != null ? request.getParameter("status") : "";
+            String direction = request.getParameter("directionSearch") != null ? request.getParameter("directionSearch") : "";
+            String status = request.getParameter("statusSearch") != null ? request.getParameter("statusSearch") : "";
             AlertDAO dao = new AlertDAO();
             List<Alert> list = dao.getAlertsByUser(loginUser.getUserID(), keyword, direction, status);
             request.setAttribute("ALERT_LIST", list);
             request.setAttribute("keyword", keyword);
-            request.setAttribute("direction", direction);
-            request.setAttribute("status", status);
+            request.setAttribute("directionSearch", direction);
+            request.setAttribute("statusSearch", status);
             request.setAttribute("list", list);
             request.getRequestDispatcher("alertList.jsp").forward(request, response);
         } catch (Exception e) {

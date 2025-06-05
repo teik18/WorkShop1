@@ -132,12 +132,12 @@
         <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
-                <a href="MainController?action=SearchUser">Stocks List</a>
-                <a href="MainController?action=SearchStock">Transactions List</a>
-                <a href="MainController?action=ViewAlert">Alerts List</a>
                 <% if ("AD".equals(loginUser.getRoleID())) { %>
-                <a href="MainController?action=ViewUsers">Users List</a><br>
+                <a href="MainController?action=SearchUser">User List</a>
                 <% } %>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a href="MainController?action=SearchStock">Stock List</a>
+                <a class="active" href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">

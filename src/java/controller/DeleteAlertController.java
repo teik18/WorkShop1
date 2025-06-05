@@ -52,14 +52,14 @@ public class DeleteAlertController extends HttpServlet {
             } else {
                 request.setAttribute("MSG", "Failed to delete alert. Only inactive alerts can be deleted.");
             }
-            request.getRequestDispatcher("alertList.jsp").forward(request, response);
+            request.getRequestDispatcher("SearchAlertController").forward(request, response);
         } catch (NumberFormatException e) {
             request.setAttribute("MSG", "Invalid alert ID format.");
-            request.getRequestDispatcher("alertList.jsp").forward(request, response);
+            request.getRequestDispatcher("SearchAlertController").forward(request, response);
         } catch (Exception e) {
             log("Error at DeleteAlertController: " + e.toString());
             request.setAttribute("MSG", "An error occurred while deleting the alert.");
-            request.getRequestDispatcher("alertList.jsp").forward(request, response);
+            request.getRequestDispatcher("SearchAlertController").forward(request, response);
         }
     } 
     

@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @WebServlet(name = "UpdateAlertController", urlPatterns = {"/UpdateAlertController"})
 public class UpdateAlertController extends HttpServlet {
-    private static final String ALERT_LIST_PAGE = "alertList.jsp";
+    private static final String ALERT_LIST_PAGE = "SearchAlertController";
     private static final String UPDATE_ALERT_PAGE = "updateAlert.jsp";
 
     /**

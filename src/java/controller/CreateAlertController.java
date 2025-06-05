@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -41,12 +43,17 @@ public class CreateAlertController extends HttpServlet {
                 return;
             }
             StockDAO stockDao = new StockDAO();
+            AlertDAO dao = new AlertDAO();
             String ticker = request.getParameter("ticker");
             String thresholdStr = request.getParameter("threshold");
             String direction = request.getParameter("direction");
-            String status = request.getParameter("status");
+            String status = request.getParameter("status") != null ? request.getParameter("status") : "inactive"; // Mặc định status là inactive
+            String keyword = request.getParameter("search") != null ? request.getParameter("search") : "";
+            String searchDirection = request.getParameter("directionSearch") != null ? request.getParameter("directionSearch") : "";
+            String searchStatus = request.getParameter("statusSearch") != null ? request.getParameter("statusSearch") : "";
             if (ticker == null || ticker.isEmpty() || thresholdStr == null || direction == null) {
-                request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                request.getRequestDispatcher("alertList.jsp").forward(request, response);
                 return;
             }
 
@@ -55,46 +62,67 @@ public class CreateAlertController extends HttpServlet {
                 threshold = Float.parseFloat(thresholdStr);
                 if (threshold <= 0) {
                     request.setAttribute("MSG", "Threshold must be greater than 0!!");
-                    request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                    setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                    request.getRequestDispatcher("alertList.jsp").forward(request, response);
                     return;
                 }
                 if (ticker.isEmpty() || direction.isEmpty()) {
                     request.setAttribute("MSG", "Please enter information!!");
-                    request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                    setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                    request.getRequestDispatcher("alertList.jsp").forward(request, response);
                     return;
                 }
                 if (!stockDao.isTickerExist(ticker)) {
                     request.setAttribute("MSG", "This ticker does not exist!!");
-                    request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                    setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                    request.getRequestDispatcher("alertList.jsp").forward(request, response);
                     return;
                 }
                 if (!direction.equals("increase") && !direction.equals("decrease")) {
                     request.setAttribute("MSG", "Direction must be decrease or increase!!");
-                    request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                    setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                    request.getRequestDispatcher("alertList.jsp").forward(request, response);
                     return;
                 }
-                AlertDAO alertDao = new AlertDAO();
-                if (alertDao.isDuplicate(loginUser.getUserID(), ticker, threshold, direction)) {
-                    request.setAttribute("MSG", "The alert has existed!!");
-                    request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                if (dao.isDuplicate(loginUser.getUserID(), ticker, threshold, direction)) {
+                    request.setAttribute("MSG", "The alert already existed!!");
+                    setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+                    request.getRequestDispatcher("alertList.jsp").forward(request, response);
                     return;
                 }
             } catch (NumberFormatException e) {
-                request.setAttribute("MSG", "Failed to create alert.");
-                request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+                request.setAttribute("MSG", "Invalid threshold format!!");
+                request.getRequestDispatcher("alertList.jsp").forward(request, response);
                 return;
             }
 
             Alert alert = new Alert(0, loginUser.getUserID(), ticker, threshold, direction, status);
-            AlertDAO dao = new AlertDAO();
             if (dao.createAlert(alert)) {
                 request.setAttribute("MSG", "Alert created successfully.");
             } else {
                 request.setAttribute("MSG", "Failed to create alert.");
             }
-            request.getRequestDispatcher("createAlert.jsp").forward(request, response);
+            setAlertListAttributes(request, loginUser, keyword, searchDirection, searchStatus);
+            request.getRequestDispatcher("alertList.jsp").forward(request, response);
         } catch (Exception e) {
             log(e.getMessage());
+            setAlertListAttributes(request, (User) request.getSession().getAttribute("LOGIN_USER"), "", "", "");
+            request.getRequestDispatcher("alertList.jsp").forward(request, response);
+        }
+    }
+    
+    // Hàm hỗ trợ để lấy danh sách alert và đặt các thuộc tính cần thiết
+    private void setAlertListAttributes(HttpServletRequest request, User loginUser, String keyword, String direction, String status) {
+        try {
+            AlertDAO dao = new AlertDAO();
+            List<Alert> list = dao.getAlertsByUser(loginUser.getUserID(), keyword, direction, status);
+            request.setAttribute("ALERT_LIST", list);
+            request.setAttribute("list", list);
+            request.setAttribute("keyword", keyword);
+            request.setAttribute("directionSearch", direction);
+            request.setAttribute("statusSearch", status);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 

@@ -193,7 +193,7 @@ public class AlertDAO {
                 Alert alert = new Alert(rs.getInt("alertID"), rs.getString("userID"), rs.getString("ticker"), rs.getFloat("threshold"), rs.getString("direction"), rs.getString("status")); // mapping fields
                 list.add(alert);
             }
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return list;
