@@ -26,22 +26,22 @@
             }
 
             .sidebar {
-                width: 220px;
+                width: 260px;
                 background-color: #3f51b5;
                 color: white;
                 padding: 20px;
             }
 
             .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
+                font-size: 28px;
+                margin: 20px 0;
             }
 
             .sidebar a {
                 display: block;
                 color: white;
                 text-decoration: none;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
                 font-weight: bold;
             }
 
@@ -83,6 +83,10 @@
             .function-header .msg {
                 margin-top: 8px;
             }
+            
+            .inputSearch {
+                margin: 5px;
+            }
 
             table {
                 width: 100%;
@@ -92,7 +96,7 @@
             th, td {
                 border: 1px solid #ddd;
                 padding: 8px;
-                text-align: left;
+                text-align: center;
             }
 
             th {
@@ -155,6 +159,10 @@
 
             .butDelete {
                 background-color: #f44336; /* Delete button */
+            }
+            
+            #showCreateForm {
+                margin-bottom: 20px;
             }
 
             form {
@@ -236,12 +244,12 @@
         <div class="containner">
             <div class="sidebar">
                 <h2>Menu</h2>
+                <a href="MainController?action=SearchStock">Stock List</a>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a href="MainController?action=ViewAlerts">Alert List</a>
                 <% if ("AD".equals(loginUser.getRoleID())) { %>
                 <a class="active" href="MainController?action=SearchUser">User List</a>
                 <% } %>
-                <a href="MainController?action=SearchTransaction">Transaction List</a>
-                <a href="MainController?action=SearchStock">Stock List</a>
-                <a href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">
@@ -249,9 +257,18 @@
                     <h1>Welcome, <c:out value="${sessionScope.LOGIN_USER.fullName}"/></h1>
                     <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
+                
+                <hr>
 
                 <div class="function-header">
                     <div class="function">
+
+                        <!-- search form -->
+                        <form action="MainController">
+                            Search<input type="text" class="inputSearch" name="search" value="<%= search%>" placeholder="Search"/>
+                            <button type="submit" class="searchBtn" name="action" value="SearchUser">Search</button>
+                        </form>
+                            
                         <button id="showCreateForm" class="button-green" onclick="toggleCreateForm()">Create</button>
                         <!--create form-->
                         <div id="createForm" style="display: none;">
@@ -283,16 +300,6 @@
                                 <button type="submit" class="button-green">Create</button>
                             </form>
                         </div>
-
-                        <!-- search form -->
-                        <form action="MainController">
-                            Search<input type="text" name="search" value="<%= search%>"/>
-                            <button type="submit" class="searchBtn" name="action" value="SearchUser">Search</button>
-                        </form>
-
-                        <c:if test="${empty listUser}">
-                            <p>No matching stocks found!</p>
-                        </c:if>
                     </div>
                     <div class="message">
                         <%

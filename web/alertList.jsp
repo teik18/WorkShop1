@@ -18,7 +18,7 @@
             * {
                 box-sizing: border-box;
                 margin: 0;
-                    padding: 0;
+                padding: 0;
             }
 
             body {
@@ -33,22 +33,22 @@
             }
 
             .sidebar {
-                width: 220px;
+                width: 260px;
                 background-color: #3f51b5;
                 color: white;
                 padding: 20px;
             }
 
             .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
+                font-size: 28px;
+                margin: 20px 0;
             }
 
             .sidebar a {
                 display: block;
                 color: white;
                 text-decoration: none;
-                margin-bottom: 10px;
+                margin-bottom: 20px;
                 font-weight: bold;
             }
 
@@ -105,10 +105,6 @@
             th, td {
                 border: 1px solid #ddd;
                 padding: 8px;
-                text-align: left;
-            }
-
-            th, td:nth-child(1), td:nth-child(2), td:nth-child(6) {
                 text-align: center;
             }
 
@@ -251,12 +247,12 @@
         <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
+                <a href="MainController?action=SearchStock">Stock List</a>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a class="active" href="MainController?action=ViewAlerts">Alert List</a>
                 <% if ("AD".equals(loginUser.getRoleID())) { %>
                 <a href="MainController?action=SearchUser">User List</a>
                 <% } %>
-                <a href="MainController?action=SearchTransaction">Transaction List</a>
-                <a href="MainController?action=SearchStock">Stock List</a>
-                <a class="active" href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">
