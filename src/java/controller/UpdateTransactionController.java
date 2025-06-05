@@ -21,31 +21,46 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name="UpdateTransactionController", urlPatterns={"/UpdateTransactionController"})
 public class UpdateTransactionController extends HttpServlet {
    
+    private TransactionDAO dao = new TransactionDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
-            User loginUser = (User) request.getSession().getAttribute("LOGIN_USER");
-            if (loginUser == null || !"AD".equals(loginUser.getRoleID())) {
-                request.setAttribute("MSG", "Only admin can update transaction status.");
-                request.getRequestDispatcher("SearchTransactionController").forward(request, response);
-                return;
-            }
-
-            int transactionId = Integer.parseInt(request.getParameter("transactionId"));
-            String status = request.getParameter("status");
-
-            TransactionDAO dao = new TransactionDAO();
-            if (dao.update(transactionId, status)) {
-                request.setAttribute("MSG", "Transaction status updated successfully.");
-            } else {
-                request.setAttribute("MSG", "Failed to update transaction status.");
-            }
-            request.getRequestDispatcher("SearchTransactionController").forward(request, response);
-        } catch (Exception e) {
-            log(e.getMessage());
+        if (request.getSession().getAttribute("LOGIN_USER") == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
         }
+        
+        User loginUser = (User) request.getSession().getAttribute("LOGIN_USER");
+        if ("AD".equals(loginUser.getRoleID())) {
+            try {
+                int transactionId = Integer.parseInt(request.getParameter("transactionId"));
+                String status = request.getParameter("status");
+                
+                if (dao.update(transactionId, status)) {
+                    request.setAttribute("MSG", "Transaction status updated successfully.");
+                } else {
+                    request.setAttribute("MSG", "Failed to update transaction status.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if("NV".equals(loginUser.getRoleID())) {
+            try {
+                int transactionId = Integer.parseInt(request.getParameter("transactionId"));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                double price = Double.parseDouble(request.getParameter("price"));
+                
+                if (dao.updateByNV(transactionId, quantity, price)) {
+                    request.setAttribute("MSG", "Transaction status updated successfully.");
+                } else {
+                    request.setAttribute("MSG", "Failed to update transaction status.");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        request.getRequestDispatcher("SearchTransactionController").forward(request, response);
     }
 
 

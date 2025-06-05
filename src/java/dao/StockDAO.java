@@ -73,7 +73,7 @@ public class StockDAO {
     }
 
     // search by price
-    public List<Stock> search(double min, double max)
+    public List<Stock> searchByPriceRange(double min, double max)
             throws SQLException, ClassNotFoundException {
         List<Stock> list = new ArrayList<>();
         String sql = "SELECT * FROM tblStocks WHERE price BETWEEN ? AND ?";
@@ -138,6 +138,21 @@ public class StockDAO {
             ps.setString(5, s.getTicker());
             return ps.executeUpdate() > 0;
         }
+    }
+    
+    public Stock getStockById(String id) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM tblStocks WHERE ticker = ?";
+        try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if(rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // helper

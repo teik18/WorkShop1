@@ -6,220 +6,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>User List</title>
-
-        <style>
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
-
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f9f8ff;
-            }
-
-            .containner {
-                display: flex;
-                height: 100vh;
-            }
-
-            .sidebar {
-                width: 220px;
-                background-color: #3f51b5;
-                color: white;
-                padding: 20px;
-            }
-
-            .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .sidebar a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                margin-bottom: 10px;
-                font-weight: bold;
-            }
-
-            .sidebar a:hover {
-                background-color: #303f9f;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .header a {
-                background-color: #4CAF50;
-                color: white;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-
-            .header a:hover {
-                background-color: #45a049;
-            }
-
-            .function-header {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 10px;
-            }
-
-            .function-header .msg {
-                margin-top: 8px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #3f51b5;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            tr:hover {
-                background-color: #ddd;
-            }
-
-            .actions {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-            }
-
-            button {
-                padding: 10px 12px;
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-                width: 70px;
-                text-align: center;
-            }
-
-            .button-green {
-                background-color: #28a745; /* Màu xanh lá */
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .button-red {
-                background-color: #dc3545; /* Màu đỏ */
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .button-green:hover {
-                background-color: #218838;
-            }
-
-            .button-red:hover {
-                background-color: #c82333;
-            }
-
-            .butDelete {
-                background-color: #f44336; /* Delete button */
-            }
-
-            form {
-                margin: 0;
-            }
-
-            #createForm {
-                background-color: white;
-                padding: 15px;
-                box-shadow: 0 0 10px #ccc;
-                margin-bottom: 20px;
-                width: 460px;
-            }
-
-            #createForm form {
-                display: flex;
-                flex-direction: column;
-                gap: 10px; /* Khoảng cách giữa các dòng */
-                margin-top: 15px;
-            }
-
-            #createForm label {
-                display: inline-block;
-                width: 100px;
-                margin-right: 10px;
-                font-weight: bold;
-            }
-
-            #createForm .form-group {
-                display: flex;
-                align-items: center;
-            }
-
-            #createForm h3 {
-                margin-top: 0;
-            }
-            input, select {
-                padding: 3px;
-            }
-
-            .searchBtn  {
-                padding: 8px 16px;
-            }
-
-            .msg {
-                padding: 10px;
-                border: 1px solid #5cb85c;
-                border-radius: 4px;
-                width: fit-content;
-            }
-            .msg.success {
-                border: 2px solid #5cb85c;
-            }
-            .msg.error {
-                border: 2px solid #ebccd1;
-            }
-            #msg {
-                transition: opacity 0.5s ease-out;
-            }
-            .sidebar a.active {
-                background-color: #283593;
-                padding: 5px;
-                border-radius: 4px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/pageStyle.css">        
     </head>
     <body>
         <%
@@ -233,15 +20,15 @@
                 return;
             }
         %>
-        <div class="containner">
+        <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
+                <a href="MainController?action=SearchStock">Stock List</a>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a href="MainController?action=ViewAlerts">Alert List</a>
                 <% if ("AD".equals(loginUser.getRoleID())) { %>
                 <a class="active" href="MainController?action=SearchUser">User List</a>
                 <% } %>
-                <a href="MainController?action=SearchTransaction">Transaction List</a>
-                <a href="MainController?action=SearchStock">Stock List</a>
-                <a href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">
@@ -249,9 +36,18 @@
                     <h1>Welcome, <c:out value="${sessionScope.LOGIN_USER.fullName}"/></h1>
                     <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
+                
+                <hr>
 
                 <div class="function-header">
                     <div class="function">
+                        <!-- search form -->
+                        <form action="MainController">
+                            Search:
+                            <input type="text" name="search" placeholder="Search" value="<%= search%>"/>
+                            <button type="submit" name="action" value="SearchUser">Search</button>
+                        </form>
+                        
                         <button id="showCreateForm" class="button-green" onclick="toggleCreateForm()">Create</button>
                         <!--create form-->
                         <div id="createForm" style="display: none;">
@@ -282,16 +78,10 @@
                                 </div>
                                 <button type="submit" class="button-green">Create</button>
                             </form>
-                        </div>
-
-                        <!-- search form -->
-                        <form action="MainController">
-                            Search<input type="text" name="search" value="<%= search%>"/>
-                            <button type="submit" class="searchBtn" name="action" value="SearchUser">Search</button>
-                        </form>
+                        </div>                        
 
                         <c:if test="${empty listUser}">
-                            <p>No matching stocks found!</p>
+                            <p style="margin: 10px 0 0;">No matching users found!</p>
                         </c:if>
                     </div>
                     <div class="message">
@@ -317,23 +107,23 @@
                     <tbody>
                         <c:forEach var="user" items="${listUser}" varStatus="st">
                             <tr>
-                        <form action="MainController" method="POST">
-                            <input type="hidden" name="search" value="<%= search%>"/>
-                            <td>${st.count}</td>
-                            <td>
-                                <input type="hidden" name="userID" value="${user.userID}"/>
-                                ${user.userID}
-                            </td>
-                            <td><input type="text"  name="fullName"   value="${user.fullName}"   required/></td>
-                            <td><input type="text"  name="roleID" value="${user.roleID}" required/></td>
-                            <td><input type="text"  name="password"  value="${user.password}" required/></td>
-                            <td class="actions">
-                                <button type="submit" name="action" value="UpdateUser">Update</button>
-                                <button type="submit" class="butDelete" name="action" value="DeleteUser">Delete</button>
-                            </td>
-                        </form>
-                        </tr>
-                    </c:forEach>
+                                <form action="MainController" method="POST">
+                                    <input type="hidden" name="search" value="<%= search%>"/>
+                                    <td>${st.count}</td>
+                                    <td>
+                                        <input type="hidden" name="userID" value="${user.userID}"/>
+                                        ${user.userID}
+                                    </td>
+                                    <td>${user.fullName}</td>
+                                    <td>${user.roleID}</td>
+                                    <td>${user.password}</td>
+                                    <td class="actions">
+                                        <button type="submit" name="action" value="UpdateUser">Update</button>
+                                        <button class="butDelete" type="submit" name="action" value="DeleteUser" onclick="return confirm('Are you sure to delete this user?')">Delete</button>
+                                    </td>
+                                </form>
+                            </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
 

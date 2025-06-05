@@ -14,231 +14,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Alert List Page</title>
-        <style>
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                    padding: 0;
-            }
-
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f9f8ff;
-            }
-
-            .container {
-                display: flex;
-                height: 100vh;
-            }
-
-            .sidebar {
-                width: 220px;
-                background-color: #3f51b5;
-                color: white;
-                padding: 20px;
-            }
-
-            .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .sidebar a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                margin-bottom: 10px;
-                font-weight: bold;
-            }
-
-            .sidebar a:hover {
-                background-color: #303f9f;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .header h1 {
-                margin: 0;
-                /* font-size: 22px; */
-            }
-
-            .header a {
-                background-color: #4CAF50;
-                color: white;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-
-            .header a:hover {
-                background-color: #45a049;
-            }
-
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            .function-header {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 10px;
-            }
-
-            .function-header .msg {
-                margin-top: 8px;
-            }
-
-            table {
-                margin-top: 20px;
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th, td:nth-child(1), td:nth-child(2), td:nth-child(6) {
-                text-align: center;
-            }
-
-            th {
-                background-color: #3f51b5;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            tr:hover {
-                background-color: #ddd;
-            }
-
-            .function-buttons {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-                position: relative;
-            }
-
-            button {
-                padding: 10px 12px;
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-                width: 70px;
-                text-align: center;
-            }
-
-            .button-green {
-                background-color: #28a745; /* Màu xanh lá */
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .button-red {
-                background-color: #dc3545; /* Màu đỏ */
-                color: white;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 4px;
-                cursor: pointer;
-            }
-
-            .button-green:hover {
-                background-color: #218838;
-            }
-
-            .button-red:hover {
-                background-color: #c82333;
-            }
-
-            .butDelete {
-                background-color: #f44336; /* Delete button */
-            }
-            
-            .delete-placeholder {
-                width: 70px; /* Cùng chiều rộng với nút Delete */
-                height: 28px; /* Cùng chiều cao với nút */
-            }
-            form {
-                margin: 0;
-            }
-
-            #createForm {
-                background-color: white;
-                padding: 15px;
-                box-shadow: 0 0 10px #ccc;
-                margin-bottom: 20px;
-                width: 460px;
-            }
-
-            #createForm form {
-                display: flex;
-                flex-direction: column;
-                gap: 10px; /* Khoảng cách giữa các dòng */
-                margin-top: 15px;
-            }
-
-            #createForm label {
-                display: inline-block;
-                width: 100px;
-                margin-right: 10px;
-                font-weight: bold;
-            }
-
-            #createForm .form-group {
-                display: flex;
-                align-items: center;
-            }
-
-            #createForm h3 {
-                margin-top: 0;
-            }
-
-            .msg {
-                padding: 10px;
-                border: 1px solid #5cb85c;
-                border-radius: 4px;
-                width: fit-content;
-            }
-            .msg.success {
-                border: 2px solid #5cb85c;
-            }
-            .msg.error {
-                border: 2px solid #ebccd1;
-            }
-            #msg {
-                transition: opacity 0.5s ease-out;
-            }
-            .sidebar a.active {
-                background-color: #283593;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            input, select {
-                padding: 3px;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/pageStyle.css"> 
     </head>
     <body>
         <%
@@ -251,12 +27,12 @@
         <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
+                <a href="MainController?action=SearchStock">Stock List</a>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
+                <a class="active" href="MainController?action=ViewAlerts">Alert List</a>
                 <% if ("AD".equals(loginUser.getRoleID())) { %>
                 <a href="MainController?action=SearchUser">User List</a>
                 <% } %>
-                <a href="MainController?action=SearchTransaction">Transaction List</a>
-                <a href="MainController?action=SearchStock">Stock List</a>
-                <a class="active" href="MainController?action=ViewAlerts">Alert List</a>
             </div>
 
             <div class="main-content">
@@ -271,6 +47,7 @@
                     <div class="function">
                         <!--search form-->
                         <form action="MainController" method="POST">
+                            Search:
                             <input type="text" name="search" placeholder="Search" value="${requestScope.keyword}">
                             <select name="directionSearch">
                                 <option value="" ${requestScope.directionSearch == '' ? 'selected' : ''}>Any</option>
@@ -353,7 +130,7 @@
                         <td><input type="text" name="threshold" value="<%= alert.getThreshold()%>" readonly></td>
                         <td><input type="text" name="direction" value="<%= alert.getDirection()%>" readonly></td>
                         <td><input type="text" name="status" value="<%= alert.getStatus()%>" readonly></td>
-                        <td>
+                        <td> 
                             <div class="function-buttons">
                                 <form action="MainController" method="POST">
                                     <input type="hidden" name="alertID" value="<%= alert.getAlertID() %>">
@@ -362,7 +139,7 @@
                                 <% if ("inactive".equals(alert.getStatus())) { %>
                                 <form action="MainController" method="POST">
                                     <input type="hidden" name="alertID" value="<%= alert.getAlertID() %>">
-                                    <button class="butDelete" type="submit" name="action" value="DeleteAlert">Delete</button>
+                                    <button class="butDelete" type="submit" name="action" value="DeleteAlert" onclick="return confirm('Are you sure to delete this alert?')">Delete</button>
                                 </form>
                                 <% } else { %>
                                 <div class="delete-placeholder"></div>

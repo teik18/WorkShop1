@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,13 +33,19 @@ public class SearchTransactionController extends HttpServlet {
         HttpSession session = request.getSession();
         User loginUser = (User) session.getAttribute("LOGIN_USER");
         
-        List<Transaction> list = null;
+        if (loginUser == null) {
+            response.sendRedirect("login.jsp");
+            return;
+        }
+        
+        String search = request.getParameter("search");
+        if(search == null) {
+            search = "";
+        }
+        
+        List<Transaction> list = new ArrayList<>();
         if ("AD".equals(loginUser.getRoleID())) {
             // Admin thấy tất cả
-            String search = request.getParameter("search");
-            if(search == null) {
-                search = "";
-            }
             try {
                 list = dao.search(search);
             } catch (SQLException e) {
@@ -47,7 +54,8 @@ public class SearchTransactionController extends HttpServlet {
         } else {
             // Nhân viên chỉ thấy của mình
             try {
-                list = dao.getTransactionsByUserID(loginUser.getUserID());
+                list = dao.getTransactionsByUserID(loginUser.getUserID(), search);
+                
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
             }

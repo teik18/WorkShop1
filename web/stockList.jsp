@@ -1,133 +1,21 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="dto.User"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Stock List</title>
-
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f9f8ff;
-            }
-            
-            .container {
-                display: flex;
-                height: 100vh;
-            }
-
-            .sidebar {
-                width: 220px;
-                background-color: #3f51b5;
-                color: white;
-                padding: 20px;
-            }
-
-            .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .sidebar a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                margin-bottom: 10px;
-                font-weight: bold;
-            }
-
-            .sidebar a:hover {
-                background-color: #303f9f;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .header a {
-                background-color: #4CAF50;
-                color: white;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-
-            .header a:hover {
-                background-color: #45a049;
-            }
-
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #3f51b5;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            tr:hover {
-                background-color: #ddd;
-            }
-
-            .actions button {
-                margin-right: 5px;
-            }
-
-            button {
-                padding: 6px 12px;
-                margin-right: 5px;
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-            }
-
-            button[type="submit"]:last-child {
-                background-color: #f44336; /* Delete button */
-            }
-
-            .msg {
-                margin-top: 15px;
-                padding: 10px;
-                background-color: #e0ffe0;
-                border: 1px solid #5cb85c;
-                color: #3c763d;
-                border-radius: 4px;
-                width: fit-content;
-            }
-            .sidebar a.active {
-                background-color: #283593;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/pageStyle.css">
     </head>
     <body>
         <%
+            User loginUser = (User) session.getAttribute("LOGIN_USER");
+            if (loginUser == null) {
+                response.sendRedirect("login.jsp");
+                return;
+            }
+    
             String search = request.getParameter("search");
             if (search == null) {
                 search = "";
@@ -138,10 +26,12 @@
 
             <div class="sidebar">
                 <h2>Menu</h2>
-                <a href="MainController?action=SearchUser">User List</a>
-                <a href="MainController?action=SearchTransaction">Transaction List</a>
                 <a class="active" href="MainController?action=SearchStock">Stock List</a>
+                <a href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=ViewAlerts">Alert List</a>
+                <% if ("AD".equals(loginUser.getRoleID())) { %>
+                <a href="MainController?action=SearchUser">User List</a>
+                <% } %>
             </div>
 
             <div class="main-content">
@@ -150,56 +40,97 @@
                     <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
                 
+                <hr>
+                
                 <!-- Price‐range search -->
-                <form action="${pageContext.request.contextPath}/SearchPriceController" method="POST">
+                <form style="margin-top:8px;" action="${pageContext.request.contextPath}/SearchStockController" method="POST">
                     Price between
-                    <input type="number" step="0.01" name="minPrice" placeholder="min"
-                        value="${param.minPrice}" required/>
+                    <input type="number" step="0.01" name="minPrice" placeholder="min" value="${param.minPrice}" required />
                     and
-                    <input type="number" step="0.01" name="maxPrice" placeholder="max"
-                        value="${param.maxPrice}" required/>
-                    <button type="submit">Search Price</button>
+                    <input type="number" step="0.01" name="maxPrice" placeholder="max" value="${param.maxPrice}" required />
+                    <button type="submit">Search</button>
                 </form>
                     
-                <form style="margin-top:8px;" action="MainController">
-                    Search<input type="text" name="search" value="<%= search%>"/>
-                    <button type="submit" name="action" value="SearchStock">Search Stock</button>
+                <!-- Keyword search form -->
+                <form style="margin-top:8px;" action="MainController" method="GET">
+                    Search:
+                    <input type="text" name="search" placeholder="Search" value="<%= search %>" />
+                    <button type="submit" name="action" value="SearchStock">Search</button>
                 </form>
 
                 <!-- Sort links -->
                 <p style="margin-top:8px;">
                     Sort by price:
-                    <a href="${pageContext.request.contextPath}/MainController?sort=asc">Ascending</a> |
-                    <a href="${pageContext.request.contextPath}/MainController?sort=desc">Descending</a> |
-                    <a href="${pageContext.request.contextPath}/MainController">None</a>
+                    <a href="MainController?action=SearchStock&sort=asc">Ascending</a> |
+                    <a href="MainController?action=SearchStock&sort=desc">Descending</a> |
+                    <a href="MainController?action=SearchStock">None</a>
                 </p>
+                
+                <% if ("AD".equals(loginUser.getRoleID())) { %>
+                <button class="button-green" type="button" onclick="toggleCreateForm()">Create</button> 
+                <% } %>
 
+                <div id="createForm" style="display: none;">
+                    <h3>Create New Stock</h3> <hr>
+                    <form action="MainController" method="POST">
+                        <div class="form-group">
+                            <label>Ticker:</label>
+                            <input type="text" name="ticker" placeholder="Ticker" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Name:</label>
+                            <input type="text" name="name" placeholder="Stock Name" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Sector:</label>
+                            <input type="text" name="sector" placeholder="Sector" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Price:</label>
+                            <input type="number" step="0.01" name="price" placeholder="Price" required/>
+                        </div>
+                        <button type="submit" name="action" value="CreateStock">Create</button>
+                    </form>
+                </div> 
+                
                 <c:if test="${empty listStock}">
-                    <p>No matching stocks found!</p>
+                    <p style="margin:10px 0 0;" >No matching stocks found!</p>
                 </c:if>
 
-                <table>
+                <table style="margin-top:10px;">
                     <thead>
                         <tr>
-                            <th>No</th><th>Ticker</th><th>Name</th><th>Sector</th><th>Price</th><th>Action</th>
+                            <th>No</th><th>Ticker</th><th>Name</th><th>Sector</th><th>Price</th>
+                            <% if ("AD".equals(loginUser.getRoleID())) { %>
+                            <th>Action</th>
+                            <% } %>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach var="stock" items="${listStock}" varStatus="st">
                             <tr>
-                                <form action="${pageContext.request.contextPath}/ActionController" method="POST">
+                                <form action="MainController" method="POST">
                                     <td>${st.count}</td>
                                     <td>
                                         <input type="hidden" name="ticker" value="${stock.ticker}"/>
                                         ${stock.ticker}
                                     </td>
-                                    <td><input type="text"  name="name"   value="${stock.name}"   required/></td>
-                                    <td><input type="text"  name="sector" value="${stock.sector}" required/></td>
-                                    <td><input type="number"step="0.01" name="price"  value="${stock.price}" required/></td>
-                                    <td class="actions">
-                                        <button type="submit" name="action" value="update">Update</button>
-                                        <button type="submit" name="action" value="delete">Delete</button>
+                                    <td>
+                                        <input type="hidden"  name="name"   value="${stock.name}"/> 
+                                        ${stock.name}</td>
+                                    <td>
+                                        <input type="hidden"  name="sector" value="${stock.sector}"/>
+                                        ${stock.sector}</td>
+                                    <td>
+                                        <input type="hidden" name="price"  value="${stock.price}"/>
+                                        ${stock.price}
                                     </td>
+                                    <% if ("AD".equals(loginUser.getRoleID())) { %>
+                                    <td class="actions">
+                                        <button type="submit" name="action" value="UpdateStock">Update</button>
+                                        <button class="butDelete" onclick="return confirm('Are you sure to delete this stock?')" type="submit" name="action" value="DeleteStock">Delete</button>
+                                    </td>
+                                    <% } %>
                                 </form>
                             </tr>
                         </c:forEach>
@@ -207,5 +138,35 @@
                 </table>
             </div>
         </div>
+                
+        <script>
+            function toggleCreateForm() {
+                const formDiv = document.getElementById("createForm");
+                const btn = document.getElementById("showCreateForm");
+                if (formDiv.style.display === "none") {
+                    formDiv.style.display = "block";
+                    btn.classList.remove("button-green");
+                    btn.classList.add("button-red");
+                    btn.innerHTML = "Close";
+                } else {
+                    formDiv.style.display = "none";
+                    btn.classList.remove("button-red");
+                    btn.classList.add("button-green");
+                    btn.innerHTML = "Create";
+                }
+            }
+
+            window.addEventListener("DOMContentLoaded", () => {
+                const msg = document.getElementById("msg");
+                if (msg) {
+                    setTimeout(() => {
+                        msg.style.opacity = "0"; // mờ dần
+                        setTimeout(() => {
+                            msg.style.display = "none"; // ẩn hoàn toàn sau khi mờ
+                        }, 500); // delay đúng bằng transition ở CSS (0.5s)
+                    }, 3000); // 3 giây trước khi bắt đầu mờ
+                }
+            });
+        </script>
     </body>
 </html>

@@ -110,12 +110,13 @@ public class TransactionDAO {
         return isUpdated;
     }
     
-    public List<Transaction> getTransactionsByUserID(String userID) throws SQLException, ClassNotFoundException {
+    public List<Transaction> getTransactionsByUserID(String userID, String search) throws SQLException, ClassNotFoundException {
         List<Transaction> list = new ArrayList<>();
-        String sql = "SELECT * FROM tblTransactions WHERE userID = ?";
+        String sql = "SELECT * FROM tblTransactions WHERE userID = ? AND ticker LIKE ?";
         try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, userID);
+            ps.setString(2,"%" + search + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while(rs.next()) {
                     int id = rs.getInt("id");
@@ -131,5 +132,61 @@ public class TransactionDAO {
             e.printStackTrace();
         }
         return list;
+    }
+    
+    public Transaction getTransactionById(int id) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM tblTransactions WHERE id = ?";
+        try (Connection conn = DBUtils.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String userID = rs.getString("userID");
+                    String ticker = rs.getString("ticker");
+                    String type = rs.getString("type");
+                    int quantity = rs.getInt("quantity");
+                    float price = rs.getFloat("price");
+                    String status = rs.getString("status");
+                    return new Transaction(id, userID, ticker, type, quantity, price, status);
+                }
+            }
+        }
+        return null;
+    }
+    
+    public boolean updateByNV(int transactionId, int quantity, double price) throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        boolean isUpdated = false;
+        try {
+            conn = DBUtils.getConnection();
+            if (conn != null) {
+                String sql = "UPDATE tblTransactions SET quantity = ?, price = ? WHERE id = ?";
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, quantity);
+                ps.setDouble(2, price);
+                ps.setInt(3, transactionId);
+                isUpdated = ps.executeUpdate() > 0;
+            }
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        }
+        return isUpdated;
+    }
+    
+    public boolean delete(int id) throws Exception {
+        String sql = "DELETE FROM tblTransactions WHERE id = ?";
+        try (Connection conn = DBUtils.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

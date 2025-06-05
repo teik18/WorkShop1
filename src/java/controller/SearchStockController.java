@@ -27,18 +27,40 @@ public class SearchStockController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String search = request.getParameter("search");
-        if(search == null) {
-            search = "";
-        }
+        String sort = request.getParameter("sort");
+        //tìm giá
+        String minPriceStr = request.getParameter("minPrice");
+        String maxPriceStr = request.getParameter("maxPrice");
+
         List<Stock> list;
+
         try {
-            list = dao.search(search.trim());
-            
+            if (minPriceStr != null && maxPriceStr != null) {
+                try {
+                    double minPrice = Double.parseDouble(minPriceStr);
+                    double maxPrice = Double.parseDouble(maxPriceStr);
+                    list = dao.searchByPriceRange(minPrice, maxPrice);
+                } catch (NumberFormatException e) {
+                    // fallback: hiển thị tất cả nếu lỗi format
+                    list = dao.findAll();
+                    request.setAttribute("error", "Invalid price range");
+                }
+
+            } else if (search != null && !search.trim().isEmpty()) {
+                list = dao.search(search.trim());
+            } else if ("asc".equalsIgnoreCase(sort)) {
+                list = dao.findAllOrderByPriceAsc();
+            } else if ("desc".equalsIgnoreCase(sort)) {
+                list = dao.findAllOrderByPriceDesc();
+            } else {
+                list = dao.findAll(); // mặc định hiển thị toàn bộ
+            }
+
+            request.setAttribute("listStock", list);
+            request.getRequestDispatcher("/stockList.jsp").forward(request, response);
         } catch (Exception e) {
-            throw new ServletException(e);
+            throw new ServletException("Error in SearchStockController", e);
         }
-        request.setAttribute("listStock", list);
-        request.getRequestDispatcher("/stockList.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

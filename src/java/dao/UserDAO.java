@@ -99,6 +99,21 @@ public class UserDAO {
             return ps.executeUpdate() > 0;
         }
     }
+
+    public User getUserById(String id) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT * FROM tblUsers WHERE userID = ?";
+        try ( Connection conn = DBUtils.getConnection();  PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if(rs.next()) {
+                    return mapRow(rs);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
     private User mapRow(ResultSet rs) throws SQLException {
         return new User(

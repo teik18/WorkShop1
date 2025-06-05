@@ -2,132 +2,13 @@
 <%@page import="dto.Transaction"%>
 <%@page import="dto.User"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Transaction List Page</title>
-
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f9f8ff;
-            }
-            
-            .container {
-                display: flex;
-                height: 100vh;
-            }
-
-            .sidebar {
-                width: 220px;
-                background-color: #3f51b5;
-                color: white;
-                padding: 20px;
-            }
-
-            .sidebar h2 {
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
-
-            .sidebar a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                margin-bottom: 10px;
-                font-weight: bold;
-            }
-
-            .sidebar a:hover {
-                background-color: #303f9f;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .header a {
-                background-color: #4CAF50;
-                color: white;
-                padding: 6px 12px;
-                text-decoration: none;
-                border-radius: 4px;
-            }
-
-            .header a:hover {
-                background-color: #45a049;
-            }
-
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-
-            th {
-                background-color: #3f51b5;
-                color: white;
-            }
-
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
-
-            tr:hover {
-                background-color: #ddd;
-            }
-
-            .actions button {
-                margin-right: 5px;
-            }
-
-            button {
-                padding: 6px 12px;
-                margin-right: 5px;
-                background-color: #2196F3;
-                color: white;
-                border: none;
-                cursor: pointer;
-                border-radius: 4px;
-            }
-
-            button[type="submit"]:last-child {
-                background-color: #f44336; /* Delete button */
-            }
-
-            .msg {
-                margin-top: 15px;
-                padding: 10px;
-                background-color: #e0ffe0;
-                border: 1px solid #5cb85c;
-                color: #3c763d;
-                border-radius: 4px;
-                width: fit-content;
-            }
-
-            .sidebar a.active {
-                background-color: #283593;
-                padding: 5px;
-                border-radius: 4px;
-            }
-
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/pageStyle.css">
     </head>
     <body>
         <%
@@ -136,47 +17,88 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
+
+            String search = request.getParameter("search");
+            if (search == null) {
+                search = "";
+            }
         %>
 
         <div class="container">
             <div class="sidebar">
                 <h2>Menu</h2>
-                <a href="MainController?action=SearchUser">User List</a>
-                <a class="active" href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=SearchStock">Stock List</a>
+                <a class="active" href="MainController?action=SearchTransaction">Transaction List</a>
                 <a href="MainController?action=ViewAlerts">Alert List</a>
+                <% if ("AD".equals(loginUser.getRoleID())) { %>
+                <a href="MainController?action=SearchUser">User List</a>
+                <% } %>
             </div>
 
             <div class="main-content">
 
                 <div class="header">
-                    <h1>Welcome: <%= loginUser.getFullName()%></h1>
+                    <h1>Welcome, <%= loginUser.getFullName()%></h1>
                     <a href="${pageContext.request.contextPath}/LogoutController">Logout</a>
                 </div>
 
-                <button id="showCreateForm" type="button" onclick="toggleCreateForm()">Show Create Form</button>
-                <!--create form-->
-                <div id="createForm" style="display: none;">
-                    <h3>Create New Transaction</h3>
-                    <form action="MainController" method="POST">
-                        <input type="hidden" name="action" value="CreateTransaction"/>
-                        Ticker: <input type="text" name="ticker" placeholder="Enter ticker" required /><br/>
-                        Type: 
-                        <select name="type" required>
-                            <option value="buy">Buy</option>
-                            <option value="sell">Sell</option>
-                        </select><br/>
-                        Quantity: <input type="number" name="quantity" placeholder="Enter quantity" min="1" required /><br/>
-                        Price: <input type="number" name="price" placeholder="Enter price" step="0.01" min="0.01" required /><br/>
-                        <button type="submit">Create</button>
-                    </form>
+                <hr>
+
+                <div class="function-header">                    
+                    <div class="function">
+                        <!-- search form -->
+                        <form action="MainController" method="POST">
+                            Search: <input type="text" name="search" placeholder="Search" value="<%= search %>"/>
+                            <button type="submit" name="action" value="SearchTransaction">Search</button>
+                        </form>
+                        
+                        <button id="showCreateForm" class="button-green" type="submit" onclick="toggleCreateForm()">Create</button>
+                        <!--create form-->
+                        <div id="createForm" style="display: none;">
+                            <h3>Create New Transaction</h3> <hr>
+                            <form action="MainController" method="POST">
+                                <input type="hidden" name="action" value="CreateTransaction"/>
+                                <div class="form-group">
+                                    <label for="ticker">Ticker:</label>
+                                    <input type="text" name="ticker" placeholder="Enter ticker" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="type">Type:</label>
+                                    <select name="type" required>
+                                        <option value="buy">Buy</option>
+                                        <option value="sell">Sell</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity:</label>
+                                     <input type="number" name="quantity" placeholder="Enter quantity" min="1" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">Price:</label>
+                                    <input type="number" name="price" placeholder="Enter price" step="0.01" min="0.01" required />
+                                </div>
+                                <button type="submit">Create</button>
+                            </form>
+                        </div>
+                        <c:if test="${empty list}">
+                            <p style="margin: 10px 0 0;">No matching transactions found!</p>
+                        </c:if>
+                    </div>
+
+                    <div class="message">
+                        <%
+                            String MSG = (String) request.getAttribute("MSG");
+                            if ((MSG != null && MSG.contains("successfully")) || (MSG != null && MSG.contains("Successfully"))) {
+                        %>
+                        <h3 id="msg" class="msg success"  style="color: #3c763d; background-color: #e0ffe0;"> <%= MSG%> </h3>
+                        <%
+                            } else if (MSG != null) {
+                        %>
+                        <h3 id="msg" class="msg error" style="color: #a94442; background-color: #f2dede;"> <%= MSG%> </h3>
+                        <% } %>
+                    </div>
                 </div>
-                
-                <!-- search form -->
-                <form action="MainController" method="POST">
-                    <input type="text" name="search" placeholder="Search">
-                    <button type="submit" name="action" value="SearchTransaction">Search</button>
-                </form>
+
                 <%
                     ArrayList<Transaction> list = (ArrayList<Transaction>) request.getAttribute("list");
                     if (list != null) {
@@ -190,9 +112,7 @@
                         <th>Quantity</th>
                         <th>Price</th>
                         <th>Status</th>
-                        <% if (loginUser != null && "AD".equals(loginUser.getRoleID())) { %>
                         <th>Function</th>   
-                        <% } %>
                     </tr>
                     <%
                         int count = 0;
@@ -200,35 +120,35 @@
                             count++;
                     %>
                     <tr>
-                        <form action="MainController" method="POST">
-                            <td><%= count%></td>
-                            <td><%= transaction.getUserID()%></td>
-                            <td><%= transaction.getTicker()%></td>
-                            <td><%= transaction.getType()%></td>
-                            <td><%= transaction.getQuantity()%></td>
-                            <td><%= transaction.getPrice()%></td>
-                            <td><%= transaction.getStatus()%></td>
-                            <input type="hidden" name="id" value="<%= transaction.getId()%>">
-                            <td>
-                                <% if ("pending".equals(transaction.getStatus()) && loginUser != null && "AD".equals(loginUser.getRoleID())) {%>
-                                <form action="MainController" method="POST">
-                                    <input type="hidden" name="transactionId" value="<%= transaction.getId()%>" />
-                                    <input type="hidden" name="status" value="executed" />
-                                    <button type="submit" name="action" value="UpdateTransaction">Update</button>
-                                </form>
+                        <td><%= count%></td>
+                        <td><%= transaction.getUserID()%></td>
+                        <td><%= transaction.getTicker()%></td>
+                        <td><%= transaction.getType()%></td>
+                        <td><%= transaction.getQuantity()%></td>
+                        <td><%= transaction.getPrice()%></td>
+                        <td><%= transaction.getStatus()%></td>
+                        <td>
+                            <!--neu la admin thi update status-->
+                            <% if (loginUser != null && "AD".equals(loginUser.getRoleID())) {%>
+                            <form action="MainController" method="POST">
+                                <input type="hidden" name="transactionId" value="<%= transaction.getId()%>" />
+                                <input type="hidden" name="status" value="executed" />
+                                <% if ("pending".equals(transaction.getStatus())) {%>
+                                <button type="submit" name="action" value="UpdateTransaction">Update</button>
                                 <% } %>
-                            </td>
-                        </form>
+                                <button class="butDelete" type="submit" name="action" value="DeleteTransaction" onclick="return confirm('Are you sure to delete this transaction?')">Delete</button>
+                            </form>
+                            <% } else if ("pending".equals(transaction.getStatus()) && loginUser != null && "NV".equals(loginUser.getRoleID())) {%>
+                            <form action="MainController" method="POST">
+                                <input type="hidden" name="transactionId" value="<%= transaction.getId()%>" />
+                                <button type="submit" name="action" value="UpdateTransactionByNV">Update</button>
+                                <button class="butDelete" type="submit" name="action" value="DeleteTransaction" onclick="return confirm('Are you sure to delete this transaction?')">Delete</button>
+                            </form>
+                            <% } %>
+                        </td>
                     </tr>
-                <% } %>
+                    <% } %>
                 </table>
-                <% } %>
-
-                <%
-                    String MSG = (String) request.getAttribute("MSG");
-                    if (MSG != null) {
-                %>
-                    <h3 class="msg"> <%= MSG%> </h3>
                 <% } %>
             </div>
         </div>
@@ -239,10 +159,10 @@
                 const btn = document.getElementById("showCreateForm");
                 if (formDiv.style.display === "none") {
                     formDiv.style.display = "block";
-                    btn.innerHTML = "Close Create Form";
+                    btn.innerHTML = "Close";
                 } else {
                     formDiv.style.display = "none";
-                    btn.innerHTML = "Show Create Form";
+                    btn.innerHTML = "Create";
                 }
             }
         </script>
