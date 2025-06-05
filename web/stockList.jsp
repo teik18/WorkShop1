@@ -45,7 +45,7 @@
                 <div class="function-header">
                     <div class="function">
                         <!-- Price-range search -->
-                        <form action="${pageContext.request.contextPath}/SearchPriceController" method="POST">
+                        <form action="${pageContext.request.contextPath}/SearchStockController" method="POST">
                             Price between
                             <input type="number" step="0.01" name="minPrice" placeholder="min" value="${param.minPrice}" required/>
                             and

@@ -48,7 +48,7 @@
                         <!--search form-->
                         <form action="MainController" method="POST">
                             Search
-                            <input type="text" name="search" placeholder="Search" value="${requestScope.keyword}">
+                            <input type="text" name="search" placeholder="Search" value="${requestScope.keyword}"> 
                             <select name="directionSearch">
                                 <option value="" ${requestScope.directionSearch == '' ? 'selected' : ''}>Any</option>
                                 <option value="increase" ${requestScope.directionSearch == 'increase' ? 'selected' : ''}>Increase</option>
@@ -72,19 +72,19 @@
                                 <input type="hidden" name="action" value="CreateAlert"/>
                                 <div class="form-group">
                                     <label for="ticker">Ticker:</label>
-                                    <input type="text" id="ticker" name="ticker" value="${param.ticker}" required/>
+                                    <input type="text" id="ticker" name="ticker" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="threshold">Threshold:</label>
-                                    <input type="text" id="threshold" name="threshold" value="${param.threshold}" required/>
+                                    <input type="text" id="threshold" name="threshold" required/>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="direction">Direction:</label>
                                     <select id="direction" name="direction" required>
-                                        <option value="increase" ${param.direction == 'increase' ? 'selected' : ''}>increase</option>
-                                        <option value="decrease" ${param.direction == 'decrease' ? 'selected' : ''}>decrease</option>
+                                        <option value="increase" >increase</option>
+                                        <option value="decrease" >decrease</option>
                                     </select>
                                 </div>
                                 <button type="submit" class="button-green">Create</button>

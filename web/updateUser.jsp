@@ -34,7 +34,7 @@
         <div class="form-container">
             <h2>Update User</h2>
             <form action="UpdateUserController" method="POST">
-                <input type="hidden" name="userId" value="<%= user.getUserID() %>" />
+                <input type="hidden" name="userID" value="<%= user.getUserID() %>" />
                 
                 <label>User ID </label>
                 <input type="text" value="<%= user.getUserID() %>" disabled /><br/>
@@ -45,7 +45,7 @@
                 <label>Role ID </label>
                 <select name="roleID" required>
                     <option value="AD" <%= user.getRoleID().equals("AD") ? "selected" : "" %>>Admin</option>
-                    <option value="NV" <%= user.getRoleID().equals("NV") ? "selected" : "" %>>Nhân viên</option>
+                    <option value="NV" <%= user.getRoleID().equals("NV") ? "selected" : "" %>>Staff</option>
                 </select> <br/>
 
                 <label>Password</label>

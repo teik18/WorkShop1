@@ -92,7 +92,7 @@ public class CreateAlertController extends HttpServlet {
                 }
             } catch (NumberFormatException e) {
                 request.setAttribute("MSG", "Invalid threshold format!!");
-                request.getRequestDispatcher("alertList.jsp").forward(request, response);
+                request.getRequestDispatcher("SearchAlertController").forward(request, response);
                 return;
             }
 

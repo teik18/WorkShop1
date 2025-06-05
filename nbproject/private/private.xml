@@ -3,10 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/ACER/Documents/Java%20Projects/WorkShop1/web/alertList.jsp</file>
-            <file>file:/C:/Users/ACER/Documents/Java%20Projects/WorkShop1/src/java/controller/UpdateAlertController.java</file>
-            <file>file:/C:/Users/ACER/Documents/Java%20Projects/WorkShop1/web/userList.jsp</file>
-            <file>file:/C:/Users/ACER/Documents/Java%20Projects/WorkShop1/web/updateAlert.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/SearchStockController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/transactionList.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/DeleteStockController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/CreateTransactionController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/UpdateStockController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/alertList.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/includes/footer.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/css/updatePage.css</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/utils/DBUtils.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/MainController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/dao/StockDAO.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/userList.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/stockList.jsp</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/SearchTransactionController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/DeleteTransactionController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/src/java/controller/CreateStockController.java</file>
+            <file>file:/D:/Documents/NetBeansProjects/Workshop1/main/WorkShop1/web/css/pageStyle.css</file>
         </group>
     </open-files>
 </project-private>

@@ -43,8 +43,8 @@ public class CreateStockController extends HttpServlet {
             boolean result = dao.create(stock);
 
             if (result) {
-                session.setAttribute("MSG", "Stock created successfully!");
-                response.sendRedirect("MainController?action=SearchStock");
+                request.setAttribute("MSG", "Stock created successfully!");
+                request.getRequestDispatcher("MainController?action=SearchStock").forward(request, response);
             } else {
                 request.setAttribute("MSG", "Create failed");
                 request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
@@ -52,7 +52,7 @@ public class CreateStockController extends HttpServlet {
 
         } catch (java.sql.SQLException ex) {
             if (ex.getMessage().contains("PRIMARY KEY")) {
-                request.setAttribute("MSG", "Ticker đã tồn tại. Vui lòng nhập mã khác.");
+                request.setAttribute("MSG", "Ticker existed.");
             } else {
                 request.setAttribute("MSG", "Lỗi cơ sở dữ liệu: " + ex.getMessage());
             }

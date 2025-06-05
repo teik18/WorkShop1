@@ -50,6 +50,7 @@ public class UpdateUserController extends HttpServlet {
             request.getRequestDispatcher("SearchUserController").forward(request, response);
         } catch (Exception e) {
             log("Update error", e);
+            e.printStackTrace();
             request.setAttribute("error", "Đã xảy ra lỗi khi cập nhật!");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
