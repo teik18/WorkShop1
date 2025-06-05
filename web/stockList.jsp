@@ -50,25 +50,28 @@
                             <input type="number" step="0.01" name="minPrice" placeholder="min" value="${param.minPrice}" required/>
                             and
                             <input type="number" step="0.01" name="maxPrice" placeholder="max" value="${param.maxPrice}" required/>
-                            <button type="submit" class="searchBtn">Search Price</button>
+                            <button type="submit" class="searchBtn">Search</button>
                         </form>
 
                         <!-- Search form -->
                         <form style="margin-top:8px;" action="MainController" method="POST">
                             Search <input type="text" name="search" value="<%= search%>" placeholder="Search"/>
-                            <button type="submit" class="searchBtn" name="action" value="SearchStock">Search Stock</button>
+                            <button type="submit" class="searchBtn" name="action" value="SearchStock">Search</button>
                         </form>
 
                         <!-- Sort links -->
                         <p style="margin-top:8px;">
                             Sort by price:
-                            <a href="${pageContext.request.contextPath}/MainController?sort=asc">Ascending</a> |
-                            <a href="${pageContext.request.contextPath}/MainController?sort=desc">Descending</a> |
-                            <a href="${pageContext.request.contextPath}/MainController">None</a>
+                            <a href="MainController?action=SearchStock&sort=asc">Ascending</a> |
+                            <a href="MainController?action=SearchStock&sort=desc">Descending</a> |
+                            <a href="MainController?action=SearchStock">None</a>
                         </p>
-
-                        <!-- Create form -->
+                        
+                        <% if ("AD".equals(loginUser.getRoleID())) { %>
                         <button id="showCreateForm" class="button-green" onclick="toggleCreateForm()">Create</button>
+                        <% } %>
+                        
+                        <!-- Create form -->
                         <div id="createForm" style="display: none;">
                             <h3>Create New Stock</h3> <hr>
                             <form action="MainController" method="POST">
@@ -135,7 +138,6 @@
                                         <input type="hidden" name="ticker" value="${stock.ticker}"/>
                                         ${stock.ticker}
                                     </td>
-<<<<<<< HEAD
                                     <td>
                                         <input type="hidden"  name="name"   value="${stock.name}"/> 
                                         ${stock.name}</td>
@@ -145,16 +147,6 @@
                                     <td>
                                         <input type="hidden" name="price"  value="${stock.price}"/>
                                         ${stock.price}
-=======
-                                    <td><input type="text"  name="name"   value="${stock.name}"   required/></td>
-                                    <td><input type="text"  name="sector" value="${stock.sector}" required/></td>
-                                    <td><input type="number"step="0.01" name="price"  value="${stock.price}" required/></td>
-                                    <td>
-                                        <div class="function-buttons">
-                                            <button type="submit" name="action" value="update">Update</button><!-- Error --> 
-                                            <button type="submit" class="butDelete" name="action" value="delete">Delete</button><!-- Error --> 
-                                        </div>
->>>>>>> origin/anh-feature
                                     </td>
                                     <% if ("AD".equals(loginUser.getRoleID())) { %>
                                     <td class="actions">
@@ -169,11 +161,7 @@
                 </table>
             </div>
         </div>
-<<<<<<< HEAD
-                
-=======
-                    
->>>>>>> origin/anh-feature
+
         <script>
             function toggleCreateForm() {
                 const formDiv = document.getElementById("createForm");
@@ -195,19 +183,11 @@
                 const msg = document.getElementById("msg");
                 if (msg) {
                     setTimeout(() => {
-<<<<<<< HEAD
-                        msg.style.opacity = "0"; // mờ dần
-                        setTimeout(() => {
-                            msg.style.display = "none"; // ẩn hoàn toàn sau khi mờ
-                        }, 500); // delay đúng bằng transition ở CSS (0.5s)
-                    }, 3000); // 3 giây trước khi bắt đầu mờ
-=======
                         msg.style.opacity = "0";
                         setTimeout(() => {
                             msg.style.display = "none";
                         }, 500);
                     }, 3000);
->>>>>>> origin/anh-feature
                 }
             });
         </script>

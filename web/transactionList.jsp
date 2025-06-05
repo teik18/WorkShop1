@@ -21,11 +21,6 @@
                 response.sendRedirect("login.jsp");
                 return;
             }
-
-            String search = request.getParameter("search");
-            if (search == null) {
-                search = "";
-            }
         %>
 
         <div class="container">
@@ -80,13 +75,6 @@
                                     <label for="price">Price:</label>
                                     <input type="number" step="0.01" id="price" name="price" min="0.01" required/>
                                 </div>
-                                <div class="form-group">
-                                    <label for="status">Status:</label>
-                                    <select id="status" name="status" required>
-                                        <option value="pending">Pending</option>
-                                        <option value="executed">Executed</option>
-                                    </select>
-                                </div>
                                 <button type="submit" class="button-green">Create</button>
                             </form>
                         </div>
@@ -103,6 +91,10 @@
                         <% } %>
                     </div>
                 </div>
+                    
+                <c:if test="${empty list}">
+                    <p style="margin:10px 0;" >No matching transactions found!</p>
+                </c:if>
 
                 <%
                     ArrayList<Transaction> list = (ArrayList<Transaction>) request.getAttribute("list");
@@ -157,7 +149,7 @@
                 <% } %>
             </div>
         </div>
-
+            
         <script>
             function toggleCreateForm() {
                 const formDiv = document.getElementById("createForm");

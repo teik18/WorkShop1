@@ -47,7 +47,7 @@
                     <div class="function">
                         <!--search form-->
                         <form action="MainController" method="POST">
-                            Search:
+                            Search
                             <input type="text" name="search" placeholder="Search" value="${requestScope.keyword}">
                             <select name="directionSearch">
                                 <option value="" ${requestScope.directionSearch == '' ? 'selected' : ''}>Any</option>
@@ -105,6 +105,10 @@
                         <% } %>
                     </div>
                 </div>
+                    
+                <c:if test="${empty list}">
+                   <p style="margin:10px 0;" >No matching alerts found!</p>
+                </c:if>
 
                 <%
                     ArrayList<Alert> list = (ArrayList<Alert>) request.getAttribute("list");

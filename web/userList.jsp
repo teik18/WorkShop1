@@ -44,7 +44,8 @@
 
                         <!-- search form -->
                         <form action="MainController">
-                            Search<input type="text" class="inputSearch" name="search" value="<%= search%>" placeholder="Search"/>
+                            Search 
+                            <input type="text" class="inputSearch" name="search" value="<%= search%>" placeholder="Search"/>
                             <button type="submit" class="searchBtn" name="action" value="SearchUser">Search</button>
                         </form>
                             
@@ -83,7 +84,6 @@
                         <c:if test="${empty listUser}">
                             <p style="margin: 10px 0 0;">No matching users found!</p>
                         </c:if>
-                        </div>
                     </div>
                     <div class="message">
                         <%
@@ -127,40 +127,37 @@
                         </c:forEach>
                     </tbody>
                 </table>
-
-
-
-
             </div>
-
-            <script>
-                function toggleCreateForm() {
-                    const formDiv = document.getElementById("createForm");
-                    const btn = document.getElementById("showCreateForm");
-                    if (formDiv.style.display === "none") {
-                        formDiv.style.display = "block";
-                        btn.classList.remove("button-green");
-                        btn.classList.add("button-red");
-                        btn.innerHTML = "Close";
-                    } else {
-                        formDiv.style.display = "none";
-                        btn.classList.remove("button-red");
-                        btn.classList.add("button-green");
-                        btn.innerHTML = "Create";
-                    }
+        </div>      
+                    
+        <script>
+            function toggleCreateForm() {
+                const formDiv = document.getElementById("createForm");
+                const btn = document.getElementById("showCreateForm");
+                if (formDiv.style.display === "none") {
+                    formDiv.style.display = "block";
+                    btn.classList.remove("button-green");
+                    btn.classList.add("button-red");
+                    btn.innerHTML = "Close";
+                } else {
+                    formDiv.style.display = "none";
+                    btn.classList.remove("button-red");
+                    btn.classList.add("button-green");
+                    btn.innerHTML = "Create";
                 }
+            }
 
-                window.addEventListener("DOMContentLoaded", () => {
-                    const msg = document.getElementById("msg");
-                    if (msg) {
+            window.addEventListener("DOMContentLoaded", () => {
+                const msg = document.getElementById("msg");
+                if (msg) {
+                    setTimeout(() => {
+                        msg.style.opacity = "0"; // mờ dần
                         setTimeout(() => {
-                            msg.style.opacity = "0"; // mờ dần
-                            setTimeout(() => {
-                                msg.style.display = "none"; // ẩn hoàn toàn sau khi mờ
-                            }, 500); // delay đúng bằng transition ở CSS (0.5s)
-                        }, 3000); // 3 giây trước khi bắt đầu mờ
-                    }
-                });
-            </script>
+                            msg.style.display = "none"; // ẩn hoàn toàn sau khi mờ
+                        }, 500); // delay đúng bằng transition ở CSS (0.5s)
+                    }, 3000); // 3 giây trước khi bắt đầu mờ
+                }
+            });
+        </script>
     </body>
 </html>

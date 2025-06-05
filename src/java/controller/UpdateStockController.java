@@ -40,16 +40,16 @@ public class UpdateStockController extends HttpServlet {
             boolean result = new StockDAO().update(stock);
 
             if (result) {
-                session.setAttribute("MSG", "Update stock successfully!");
+                req.setAttribute("MSG", "Update stock successfully!");
             } else {
-                session.setAttribute("MSG", "Update failed!");
+                req.setAttribute("MSG", "Update failed!");
             }
 
             url = SUCCESS;
         } catch (Exception e) {
             log("Error at UpdateStockController: " + e.toString());
         } finally {
-            resp.sendRedirect(url);
+            req.getRequestDispatcher(url).forward(req, resp);
         }
     }
 

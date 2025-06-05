@@ -10,7 +10,7 @@ import java.io.IOException;
 @WebServlet(name = "CreateStockController", urlPatterns = {"/CreateStockController"})
 public class CreateStockController extends HttpServlet {
 
-    private static final String ERROR_PAGE = "stockList.jsp";
+    private static final String ERROR_PAGE = "SearchStockController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
@@ -51,12 +51,12 @@ public class CreateStockController extends HttpServlet {
             }
 
         } catch (java.sql.SQLException ex) {
-            if ("DUPLICATE_TICKER".equals(ex.getMessage())) {
+            if (ex.getMessage().contains("PRIMARY KEY")) {
                 request.setAttribute("MSG", "Ticker đã tồn tại. Vui lòng nhập mã khác.");
-                request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
             } else {
-                throw new ServletException("Database error", ex);
+                request.setAttribute("MSG", "Lỗi cơ sở dữ liệu: " + ex.getMessage());
             }
+            request.getRequestDispatcher(ERROR_PAGE).forward(request, response);
         }
 
     } catch (Exception e) {

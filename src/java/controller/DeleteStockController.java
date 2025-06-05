@@ -28,7 +28,7 @@ public class DeleteStockController extends HttpServlet {
         }
 
         // Trở về MainController để load lại danh sách Stock
-        response.sendRedirect(request.getContextPath() + "/MainController?action=SearchStock");
+        request.getRequestDispatcher("/MainController?action=SearchStock").forward(request, response);
     }
 
     @Override
