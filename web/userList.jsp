@@ -41,13 +41,13 @@
 
                 <div class="function-header">
                     <div class="function">
+
                         <!-- search form -->
                         <form action="MainController">
-                            Search:
-                            <input type="text" name="search" placeholder="Search" value="<%= search%>"/>
-                            <button type="submit" name="action" value="SearchUser">Search</button>
+                            Search<input type="text" class="inputSearch" name="search" value="<%= search%>" placeholder="Search"/>
+                            <button type="submit" class="searchBtn" name="action" value="SearchUser">Search</button>
                         </form>
-                        
+                            
                         <button id="showCreateForm" class="button-green" onclick="toggleCreateForm()">Create</button>
                         <!--create form-->
                         <div id="createForm" style="display: none;">
@@ -83,6 +83,7 @@
                         <c:if test="${empty listUser}">
                             <p style="margin: 10px 0 0;">No matching users found!</p>
                         </c:if>
+                        </div>
                     </div>
                     <div class="message">
                         <%
